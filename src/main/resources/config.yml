@@ -1,0 +1,30 @@
+# ========================================
+# VersionRestrictor - Configuration
+# ========================================
+
+# Liste des numéros de protocole autorisés
+# (Ces numéros correspondent aux versions Minecraft)
+# Voir https://wiki.vg/Protocol_version_numbers pour la référence complète
+# Exemples :
+# 758 : 1.20.0
+# 759 : 1.20.1
+# 760 : 1.20.2
+# 761 : 1.20.3
+# 765 : 1.20.4
+# 764 : 1.21.1
+# 767 : 1.21.4
+allowed_versions:
+  - 759   # 1.20.1
+  - 765   # 1.20.4
+  - 764   # 1.21.1
+  - 767   # 1.21.4
+
+# Message affiché aux joueurs dont la version n'est pas autorisée
+kick_message: |
+  &cDésolé, votre version de Minecraft n'est pas autorisée sur ce serveur.
+  &7Version détectée : &e%mcversion% (&f%version%&7)
+  &aVersions compatibles :
+  &21.20.x &7et &21.21.4
+
+# Afficher dans la console les kicks effectués
+log_kicks: true
