@@ -1,0 +1,15 @@
+name: VersionRestrictor
+main: fr.akanoka.versionrestrictor.VersionRestrictor
+version: 1.1.0
+author: AkaNoka
+depend: [ViaVersion]
+api-version: 1.20
+
+commands:
+  versionrestrictor:
+    description: Recharge la configuration du plugin VersionRestrictor
+    usage: /versionrestrictor reload
+permissions:
+  versionrestrictor.reload:
+    description: Autorise à recharger la configuration du plugin
+    default: op
