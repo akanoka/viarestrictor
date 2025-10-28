@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+        vendor = JvmVendorSpec.ADOPTIUM
+    }
+}
+
+group = 'fr.akanoka'
+version = '1.0.0'
+description = 'Plugin VersionRestrictor amélioré'
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://repo.viaversion.com' }
+    // Nouveau dépôt officiel PaperMC
+    maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT'
+    compileOnly 'com.viaversion:viaversion-api:4.9.2'
+}
