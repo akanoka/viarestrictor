@@ -61,22 +61,41 @@ Un fichier `config.yml` est généré au premier démarrage. Voici un exemple ut
 
 ```yaml
 # ViaRestrictor configuration
-mode: "blacklist" # "blacklist" pour interdire les versions listées, "whitelist" pour n'autoriser que les versions listées
-versions:
-  - "1.8"
-  - "1.12.2"
-  - "1.20.4"
-message: "&cDésolé, votre version de Minecraft n'est pas prise en charge.\n&7Mettez à jour votre client ou contactez un administrateur."
-kick: true
-log-blocked: true # log les tentatives de connexion bloquées dans la console
+# ========================================
+# VersionRestrictor - Configuration
+# ========================================
 
-# Exemple avancé : bloquer toutes les versions < 1.16 (utilisé côté plugin dans la logique)
-# Vous pouvez aussi utiliser des ranges dans le code si nécessaire.
+# Liste des numéros de protocole autorisés
+# (Ces numéros correspondent aux versions Minecraft)
+# Voir https://wiki.vg/Protocol_version_numbers pour la référence complète
+# Exemples :
+# 758 : 1.20.0
+# 759 : 1.20.1
+# 760 : 1.20.2
+# 761 : 1.20.3
+# 765 : 1.20.4
+# 764 : 1.21.1
+# 767 : 1.21.4
+allowed_versions:
+  - 759   # 1.20.1
+    - 765   # 1.20.4
+  - 764   # 1.21.1
+  - 767   # 1.21.4
+
+# Message affiché aux joueurs dont la version n'est pas autorisée
+kick_message: |
+  &cDésolé, votre version de Minecraft n'est pas autorisée sur ce serveur.
+  &7Version détectée : &e%mcversion% (&f%version%&7)
+  &aVersions compatibles :
+  &21.20.x &7et &21.21.4
+
+# Afficher dans la console les kicks effectués
+log_kicks: true
 ```
 
 **Champs importants :**
 
-* `mode` : `blacklist` (versions listées interdites) ou `whitelist` (seules versions listées autorisées).
+* `mode` : `whitelist` (seules versions listées autorisées).
 * `versions` : tableau de chaînes représentant des versions clients.
 * `message` : message envoyé au joueur (supporte `\n` pour sauts de ligne et codes couleurs `&`).
 * `kick` : si `true`, le joueur est expulsé après affichage du message.
@@ -96,9 +115,6 @@ log-blocked: true # log les tentatives de connexion bloquées dans la console
 
 ```
 /vr reload   # recharge la configuration
-/vr status   # affiche l'état (ViaVersion détecté, mode, nombre de versions configurées)
-/vr add <version>    # ajoute une version à la liste
-/vr remove <version> # retire une version de la liste
 ```
 
 ---
@@ -110,9 +126,6 @@ log-blocked: true # log les tentatives de connexion bloquées dans la console
 ```
 src/main/java/akanoka/viarestrictor/
   - ViaRestrictor.java (main class extends JavaPlugin)
-  - VersionChecker.java (logique de détection et comparaison de versions)
-  - ConfigManager.java (lecture/écriture config.yml)
-  - Commands/ (si vous ajoutez commandes)
 resources/
   - plugin.yml
   - config.yml (exemple)
