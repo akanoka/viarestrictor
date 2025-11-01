@@ -1,63 +1,63 @@
 # ViaRestrictor
 
-**Bloquez certaines versions de Minecraft (via ViaVersion) et affichez un message personnalisé au joueur.**
+**Block certain Minecraft versions (via ViaVersion) and display a custom message to the player.**
 
 ---
 
-## Table des matières
+## Table of Contents
 
-* [Présentation](#présentation)
-* [Fonctionnalités](#fonctionnalités)
-* [Prérequis](#prérequis)
+* [Overview](#overview)
+* [Features](#features)
+* [Prerequisites](#prerequisites)
 * [Installation](#installation)
 * [Configuration](#configuration)
-* [Utilisation](#utilisation)
-* [Développement & Build](#développement--build)
-* [Contribuer](#contribuer)
-* [Licence](#licence)
-* [Crédits](#crédits)
+* [Usage](#usage)
+* [Development & Build](#development--build)
+* [Contributing](#contributing)
+* [License](#license)
+* [Credits](#credits)
 
 ---
 
-## Présentation
+## Overview
 
-ViaRestrictor est un plugin Java pour serveurs Minecraft (Spigot/Paper) qui s'appuie sur **ViaVersion** pour détecter la version client d'un joueur et, selon la configuration, empêcher la connexion et/ou afficher un message personnalisé.
+ViaRestrictor is a Java plugin for Minecraft servers (Spigot/Paper) that relies on **ViaVersion** to detect a player's client version and, depending on the configuration, prevent connection and/or display a custom message.
 
-Il est utile pour :
+It is useful for:
 
-* Forcer une plage de versions autorisées.
-* Bloquer des versions connues pour causer des problèmes ou être utilisées par des clients non désirés.
-
----
-
-## Fonctionnalités
-
-* Définir une liste de versions **interdites** ou une liste **autorisée**.
-* Message personnalisable envoyé au joueur tentant de se connecter avec une version non autorisée (supporte codes de couleur Minecraft `&`).
-* Option pour `kick` le joueur automatiquement.
-* Intégration détectant la présence de ViaVersion au démarrage.
+* Enforcing a range of allowed versions.
+* Blocking versions known to cause problems or be used by unwanted clients.
 
 ---
 
-## Prérequis
+## Features
 
-* Java 17+ (ou la version recommandée pour votre serveur)
-* Serveur Spigot/Paper compatible
-* ViaVersion installé (requis pour détecter correctement les versions client)
+* Define a list of **forbidden** versions or an **allowed** list.
+* Customizable message sent to the player attempting to connect with an unauthorized version (supports Minecraft color codes `&`).
+* Option to automatically `kick` the player.
+* Integration that detects the presence of ViaVersion on startup.
+
+---
+
+## Prerequisites
+
+* Java 17+ (or the recommended version for your server)
+* Compatible Spigot/Paper server
+* ViaVersion installed (required to correctly detect client versions)
 
 ---
 
 ## Installation
 
-1. Téléchargez le JAR (`ViaRestrictor.jar`) depuis les releases GitHub ou compilez depuis la source.
-2. Placez `ViaRestrictor.jar` dans le dossier `plugins/` de votre serveur.
-3. Redémarrez le serveur. Le plugin créera automatiquement `plugins/ViaRestrictor/config.yml`.
+1. Download the JAR (`ViaRestrictor.jar`) from the GitHub releases or compile from source.
+2. Place `ViaRestrictor.jar` in your server's `plugins/` folder.
+3. Restart the server. The plugin will automatically create `plugins/ViaRestrictor/config.yml`.
 
 ---
 
 ## Configuration
 
-Un fichier `config.yml` est généré au premier démarrage. Voici un exemple utilisable :
+A `config.yml` file is generated on the first startup. Here is a usable example:
 
 ```yaml
 # ViaRestrictor configuration
@@ -65,81 +65,80 @@ Un fichier `config.yml` est généré au premier démarrage. Voici un exemple ut
 # VersionRestrictor - Configuration
 # ========================================
 
-# Liste des numéros de protocole autorisés
-# (Ces numéros correspondent aux versions Minecraft)
-# Voir https://wiki.vg/Protocol_version_numbers pour la référence complète
-# Exemples :
-# 758 : 1.20.0
-# 759 : 1.20.1
-# 760 : 1.20.2
-# 761 : 1.20.3
-# 765 : 1.20.4
-# 764 : 1.21.1
-# 767 : 1.21.4
+# List of allowed protocol numbers
+# (These numbers correspond to Minecraft versions)
+# See https://wiki.vg/Protocol_version_numbers for the complete reference
+# Examples:
+# 758: 1.20.0
+# 759: 1.20.1
+# 760: 1.20.2
+# 761: 1.20.3
+# 765: 1.20.4
+# 764: 1.21.1
+# 767: 1.21.4
 allowed_versions:
-  - 759   # 1.20.1
-    - 765   # 1.20.4
-  - 764   # 1.21.1
-  - 767   # 1.21.4
+- 759   # 1.20.1
+- 765   # 1.20.4
+- 764   # 1.21.1
+- 767   # 1.21.4
 
-# Message affiché aux joueurs dont la version n'est pas autorisée
-kick_message: |
-  &cDésolé, votre version de Minecraft n'est pas autorisée sur ce serveur.
-  &7Version détectée : &e%mcversion% (&f%version%&7)
-  &aVersions compatibles :
-  &21.20.x &7et &21.21.4
+# Message displayed to players whose version is not allowed
+kick_message: | 
+&cSorry, your Minecraft version is not allowed on this server. 
+&7Detected version: &e%mcversion% (&f%version%&7)
+&aCompatible versions:
+&21.20.x &7and &21.21.4
 
-# Afficher dans la console les kicks effectués
+# Log kicks to the console
 log_kicks: true
 ```
 
-**Champs importants :**
+**Important fields:**
 
-* `mode` : `whitelist` (seules versions listées autorisées).
-* `versions` : tableau de chaînes représentant des versions clients.
-* `message` : message envoyé au joueur (supporte `\n` pour sauts de ligne et codes couleurs `&`).
-* `kick` : si `true`, le joueur est expulsé après affichage du message.
-* `log-blocked` : si `true`, les tentatives bloquées sont loggées côté console.
-
----
-
-## Utilisation
-
-* Modifier `config.yml` selon vos besoins.
-* Redémarrer le serveur ou recharger la configuration (si vous implémentez une commande `/vr reload`).
-* Testez la connexion avec différentes versions pour vérifier le comportement.
-
-### Commandes (suggestions)
-
-> Le plugin n'inclut pas forcément ces commandes par défaut — c'est une suggestion d'API à implémenter.
-
-```
-/vr reload   # recharge la configuration
-```
+* `mode`: `whitelist` (only listed versions are allowed).
+* `versions`: array of strings representing client versions.
+* `message`: message sent to the player (supports `\n` for line breaks and color codes `&`).
+* `kick`: if `true`, the player is kicked after the message is displayed.
+* `log-blocked`: if `true`, blocked attempts are logged to the console.
 
 ---
 
-## Développement & Build
+## Usage
 
-### Structure recommandée
+* Modify `config.yml` according to your needs. * Restart the server or reload the configuration (if you implement a `/vr reload` command).
+* Test the connection with different versions to verify the behavior.
+
+### Commands (suggestions)
+
+> The plugin does not necessarily include these commands by default — this is an API suggestion to implement.
+
+```
+/vr reload   # reloads the configuration
+```
+
+---
+
+## Development & Build
+
+### Recommended Structure
 
 ```
 src/main/java/akanoka/viarestrictor/
-  - ViaRestrictor.java (main class extends JavaPlugin)
+- ViaRestrictor.java (main class extends JavaPlugin)
 resources/
-  - plugin.yml
-  - config.yml (exemple)
+- plugin.yml
+- config.yml (example)
 ```
 
 ### Build (Maven)
 
-Exemple de `pom.xml` minimal :
+Example of a minimal `pom.xml`:
 
 ```xml
-<!-- ajoutez les dépendances Spigot/Paper et ViaVersion si nécessaire -->
+<!-- add Spigot/Paper and ViaVersion dependencies if needed -->
 ```
 
-Pour compiler :
+To compile:
 
 ```bash
 mvn clean package
@@ -147,27 +146,27 @@ mvn clean package
 
 ---
 
-## Contribuer
+## Contributing
 
-Contributions bienvenues — issues, suggestions et pull requests. Merci de suivre ces règles :
+Contributions are welcome — issues, suggestions, and pull requests. Please follow these rules:
 
-1. Fork et créez une branche pour chaque feature ou bug.
-2. Tests et compatibilité avec ViaVersion appréciés.
-3. Documentez toute modification majeure dans le README.
-
----
-
-## Licence
-
-Ce projet est sous licence **Apache License 2.0**. Voir le fichier `LICENSE` pour le texte complet.
+1. Fork and create a branch for each feature or bug.
+2. Tests and compatibility with ViaVersion are appreciated.
+3. Document any major changes in the README.
 
 ---
 
-## Crédits
+## License
 
-* Maintenu par AkaNoka
-* Inspiré par les besoins des serveurs Paper/Spigot pour garder des versions client homogènes
+This project is licensed under the **Apache License 2.0**. See the `LICENSE` file for the full text.
 
 ---
 
-*Dernière mise à jour : 31 Octobre 2025*
+## Credits
+
+* Maintained by AkaNoka
+* Inspired by the needs of Paper/Spigot servers to maintain consistent client versions
+
+---
+
+*Last updated: October 31, 2025*
